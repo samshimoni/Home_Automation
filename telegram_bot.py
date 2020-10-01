@@ -3,7 +3,7 @@ import re
 import os
 import config
 from sensibo import *
-sensibo = SensiboClientAPI(config.TOKEN)
+sensibo = SensiboClientAPI(config.token_ac)
 
 
 def get_url():
@@ -83,7 +83,7 @@ def change_ac(bot, update):
 
 
 def main():
-    updater = Updater(config.token)
+    updater = Updater(config.token_bot)
     dp = updater.dispatcher
     dp.add_handler(CommandHandler('bop', bop))
     dp.add_handler(CommandHandler('cameraPhoto', photo))
