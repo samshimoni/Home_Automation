@@ -1,7 +1,7 @@
 from telegram.ext import Updater, InlineQueryHandler, CommandHandler
 import re
 import os
-
+import config
 from sensibo import *
 sensibo = SensiboClientAPI(config.TOKEN)
 
@@ -83,7 +83,7 @@ def change_ac(bot, update):
 
 
 def main():
-    updater = Updater('1380453812:AAEydBaB5bupagltnAFCohzYtIrjZTPBOwM')
+    updater = Updater(config.token)
     dp = updater.dispatcher
     dp.add_handler(CommandHandler('bop', bop))
     dp.add_handler(CommandHandler('cameraPhoto', photo))
