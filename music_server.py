@@ -1,5 +1,6 @@
 import os
 import random
+import Logger
 
 
 def find_my_ip():
@@ -8,6 +9,7 @@ def find_my_ip():
     s.connect(("8.8.8.8", 80))
     ip_address = s.getsockname()[0]
     s.close()
+    Logger.log.info('Adress is {0}'.format(ip_address))
     return ip_address
 
 
