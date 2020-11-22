@@ -16,7 +16,7 @@ except AttributeError:
 music_server = music_server.MusicServer()
 camera = Camera(bash_capture_script)
 
-logging.info('starting...')
+Logger.log.info('starting...')
 
 
 @app.route('/', methods=['GET'])
