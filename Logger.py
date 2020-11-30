@@ -1,18 +1,22 @@
 import logging
-import config
 
+from python_logging_rabbitmq import RabbitMQHandler
 
-log = logging.getLogger('logger')
-log.setLevel(logging.DEBUG)
+logger = logging.getLogger('my_service')
+logger.setLevel(logging.DEBUG)
+
+rabbit = RabbitMQHandler(host='localhost',
+                         port=30000,
+                         exchange='logs',
+                         routing_key_format='logs-api-1',
+                         username='guest',
+                         password='guest')
+logger.addHandler(rabbit)
 
 formatter = logging.Formatter('%(levelname)s | %(asctime)s | %(message)s')
-
-fh = logging.FileHandler(config.logging_file_name, mode='w', encoding='utf-8')
-fh.setLevel(logging.DEBUG)
-fh.setFormatter(formatter)
-log.addHandler(fh)
-
 ch = logging.StreamHandler()
-ch.setLevel(logging.INFO)
+ch.setLevel(logging.DEBUG)
 ch.setFormatter(formatter)
-log.addHandler(ch)
+logger.addHandler(ch)
+
+
