@@ -6,6 +6,7 @@ from python_logging_rabbitmq import RabbitMQHandler
 
 class Logger:
     def __init__(self, service_name):
+
         f = open('cfg.json',)
         data = json.load(f)
         print(data['Logger'])
