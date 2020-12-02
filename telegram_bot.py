@@ -1,7 +1,7 @@
 from telegram.ext import Updater, InlineQueryHandler, CommandHandler
 import re
 import os
-import config
+
 from sensibo import *
 sensibo = SensiboClientAPI(config.token_ac)
 
@@ -40,8 +40,6 @@ def prev(bot, update):
     chat_id = update.message.chat_id
     requests.get('http://127.0.0.1:8000/sonos/prev')
     bot.send_message(chat_id, 'Playing Previous')
-
-
 
 
 def refresh(bot, update):
