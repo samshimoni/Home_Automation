@@ -1,9 +1,11 @@
 from telegram.ext import Updater, InlineQueryHandler, CommandHandler
 import re
 import os
+import requests
+import cfg_automation
 
-from sensibo import *
-sensibo = SensiboClientAPI(config.token_ac)
+#from sensibo import *
+#sensibo = SensiboClientAPI(config.token_ac)
 
 
 def get_url():
@@ -65,12 +67,12 @@ def photo(bot, update):
         for f in files:
             os.remove(os.path.join('/home/pi/Desktop/Home_Automation/Camera', f))
 
-
+'''
 def get_devices():
     devices = sensibo.devices()
     return devices
-
-
+'''
+'''
 def change_ac(bot, update):
     chat_id = update.message.chat_id
     devs = sensibo.devices()
@@ -78,10 +80,12 @@ def change_ac(bot, update):
     ac_state = sensibo.pod_ac_state(uid)
     sensibo.pod_change_ac_state(uid, ac_state, "on", not ac_state['on'])
     bot.send_message(chat_id, 'Turned the Ac On ')
+'''
 
 
 def main():
-    updater = Updater(config.token_bot)
+    cfg = cfg_automation.Cfg('cfg.json')
+    updater = Updater(cfg.telegramToken)
     dp = updater.dispatcher
     dp.add_handler(CommandHandler('bop', bop))
     dp.add_handler(CommandHandler('cameraPhoto', photo))
@@ -90,7 +94,6 @@ def main():
     dp.add_handler(CommandHandler('sonosNext', play_next))
     dp.add_handler(CommandHandler('sonosPrev', prev))
     dp.add_handler(CommandHandler('sonosRefresh', refresh))
-    dp.add_handler(CommandHandler('ac_on', change_ac))
 
     updater.start_polling()
     updater.idle()
