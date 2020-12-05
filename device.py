@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-import Logger
+import logger
+import cfg_automation
 
 
 class Device(ABC):
@@ -9,4 +10,5 @@ class Device(ABC):
 
     def __init__(self, service_name):
         self.service_name = service_name
-        self.logger = Logger.Logger(service_name).logger
+        self.logger = logger.Logger(service_name).logger
+        self.cfg = cfg_automation.Cfg
