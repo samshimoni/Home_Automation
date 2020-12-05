@@ -6,6 +6,7 @@ import device
 class SonosMove(device.Device):
     def __init__(self):
         super(SonosMove, self).__init__("Sonos")
+
         try:
             self.logger.info("Sonos init .. trying to connect to speaker")
             self.speaker = soco.discover().pop()
