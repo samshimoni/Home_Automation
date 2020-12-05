@@ -1,19 +1,20 @@
 from flask import Flask, request
-from config import *
 from sonos import *
 import music_server
 from Camera.camera import Camera
-
+import cfg_automation
+import logger
 app = Flask(__name__)
 
 try:
     sonos = SonosMove()
-
 except AttributeError:
     print('Sonos or Apachee is down')
 
+cfg = cfg_automation.Cfg()
 music_server = music_server.MusicServer()
-camera = Camera(bash_capture_script)
+camera = Camera(cfg.cameraScript)
+logger = logger.Logger('Flask').logger
 
 
 @app.route('/', methods=['GET'])
@@ -70,12 +71,12 @@ def sonos_up():
 def capture():
     if camera.is_alive():
         camera.capture()
-        Logger.log.info('Captured')
+        logger.info('Captured')
         return "Capturing.."
     else:
-        Logger.log.error('Failed Capturing')
+        logger.error('Failed Capturing')
         return "Failed"
 
 
 if __name__ == '__main__':
-    app.run(host=IP_ADDRESS, port=PORT)
+    app.run(host=cfg.flaskAddress, port=cfg.flaskPort)
