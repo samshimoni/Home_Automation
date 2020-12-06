@@ -66,7 +66,3 @@ class SonosMove(device.Device):
 
     def _get_current_song(self):
         return self.speaker.get_current_track_info()['title']
-
-
-
-

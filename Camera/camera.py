@@ -1,25 +1,27 @@
 import os
 import datetime
-import subprocess
 from device import Device
-
-
-def create_path():
-    script_dir = os.path.dirname(__file__)
-    currentdate = datetime.datetime.now().strftime("%Y-%m-%d_%H%M")
-    rel_path = currentdate +".jpg"
-    abs_file_path = os.path.join(script_dir, rel_path)
-    return abs_file_path
+import re
+import pygame.camera
 
 
 class Camera(Device):
-    def __init__(self, path):
-        self.path = path
+    def __init__(self):
+        super(Camera, self).__init__(__name__)
+        pygame.camera.init()
+        pygame.camera.list_cameras()
 
     def is_alive(self):
-        return 'Webcam' in os.popen('lsusb').read()
+        return True
 
     def capture(self):
-        p = subprocess.Popen(self.path)
-        p.wait()
+        cam = pygame.camera.Camera("/dev/video0", (640, 480))
+        cam.start()
+        img = cam.get_image()
+        pygame.image.save(img, self.cfg.camera_photos_dir + "/" + datetime.datetime.now().strftime("%Y-%m-%d|%H:%M:%S") + ".jpg")
+        cam.stop()
 
+    def clean_dir_from_photos(self):
+        files = [f for f in os.listdir('Camera') if re.match(r'[0-9]+.*\.jpg', f)]
+        for file in files:
+            os.remove(self.cfg.camera_photos_dir + "/" + file)
