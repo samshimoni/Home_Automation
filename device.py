@@ -11,4 +11,4 @@ class Device(ABC):
     def __init__(self, service_name):
         self.service_name = service_name
         self.logger = logger.Logger(service_name).logger
-        self.cfg = cfg_automation.Cfg
+        self.cfg = cfg_automation.Cfg('cfg.json')
