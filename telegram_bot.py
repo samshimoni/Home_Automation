@@ -1,11 +1,11 @@
-from telegram.ext import Updater, InlineQueryHandler, CommandHandler
-import re
-import os
+from telegram import Update
+from telegram.ext import Updater, CommandHandler, CallbackContext
 import requests
-import cfg_automation
+import logger
+from cfg_automation import Cfg
 
-#from sensibo import *
-#sensibo = SensiboClientAPI(config.token_ac)
+
+telegram_logger = logger.Logger('telegramBot').logger
 
 
 def get_url():
@@ -14,90 +14,73 @@ def get_url():
     return url
 
 
-def bop(bot, update):
+def bop(update: Update, context: CallbackContext) -> None:
     url = get_url()
     chat_id = update.message.chat_id
-    bot.send_photo(chat_id=chat_id, photo=url)
+    telegram_logger.info('Photo sent to {}'.format(update.message.chat.first_name))
+    update.message.bot.send_photo(chat_id, url)
 
 
-def play(bot, update):
+def play(update: Update, context: CallbackContext) -> None:
     chat_id = update.message.chat_id
     requests.get('http://127.0.0.1:8000/sonos/play')
-    bot.send_message(chat_id, 'Playing')
+    update.message.bot.send_message(chat_id, 'Playing')
 
 
-def pause(bot, update):
+def pause(update: Update, context: CallbackContext) -> None:
     chat_id = update.message.chat_id
     requests.get('http://127.0.0.1:8000/sonos/pause')
-    bot.send_message(chat_id, 'Paused')
+    update.message.bot.send_message(chat_id, 'Paused')
 
 
-def play_next(bot, update):
+def play_next(update: Update, context: CallbackContext) -> None:
     chat_id = update.message.chat_id
     requests.get('http://127.0.0.1:8000/sonos/next')
-    bot.send_message(chat_id, 'Playing Next')
+    update.message.bot.send_message(chat_id, 'Playing Next')
 
 
-def prev(bot, update):
+def prev(update: Update, context: CallbackContext) -> None:
     chat_id = update.message.chat_id
     requests.get('http://127.0.0.1:8000/sonos/prev')
-    bot.send_message(chat_id, 'Playing Previous')
+    update.message.bot.send_message(chat_id, 'Playing Previous')
 
 
-def refresh(bot, update):
+def refresh(update: Update, context: CallbackContext) -> None:
     chat_id = update.message.chat_id
     ans = requests.get('http://127.0.0.1:8000/sonos/refresh').content
-    bot.send_message(chat_id, '{}'.format(ans.decode()))
-    bot.send_message(chat_id, 'Playing')
+    update.message.bot.send_message(chat_id, '{}'.format(ans.decode()))
+    update.message.bot.send_message(chat_id, 'Playing')
 
 
-def photo(bot, update):
+def photo(update: Update, context: CallbackContext) -> None:
     chat_id = update.message.chat_id
     requests.get('http://127.0.0.1:8000/camera/capture')
 
-    files = [f for f in os.listdir('./Camera') if re.match(r'[0-9]+.*\.jpg', f)]
-
     try:
-        bot.send_photo(chat_id=chat_id, photo=open('/home/pi/Desktop/Home_Automation/Camera/{}'.format(files[0]), 'rb'))
+        update.message.bot.send_photo(chat_id=chat_id, photo=open('/home/pi/Desktop/Home_Automation/Camera/{}'.format(files[0]), 'rb'))
 
     except FileNotFoundError:
         print('Could not find any photo to send')
 
     finally:
-        for f in files:
-            os.remove(os.path.join('/home/pi/Desktop/Home_Automation/Camera', f))
-
-'''
-def get_devices():
-    devices = sensibo.devices()
-    return devices
-'''
-'''
-def change_ac(bot, update):
-    chat_id = update.message.chat_id
-    devs = sensibo.devices()
-    uid = devs['main']
-    ac_state = sensibo.pod_ac_state(uid)
-    sensibo.pod_change_ac_state(uid, ac_state, "on", not ac_state['on'])
-    bot.send_message(chat_id, 'Turned the Ac On ')
-'''
+        requests.get('http://127.0.0.1:8000/camera/clean')
+        telegram_logger.info('cleaned all dir from photos')
 
 
-def main():
-    cfg = cfg_automation.Cfg('cfg.json')
-    updater = Updater(cfg.telegramToken)
-    dp = updater.dispatcher
-    dp.add_handler(CommandHandler('bop', bop))
-    dp.add_handler(CommandHandler('cameraPhoto', photo))
-    dp.add_handler(CommandHandler('sonosPlay', play))
-    dp.add_handler(CommandHandler('sonosPause', pause))
-    dp.add_handler(CommandHandler('sonosNext', play_next))
-    dp.add_handler(CommandHandler('sonosPrev', prev))
-    dp.add_handler(CommandHandler('sonosRefresh', refresh))
+class TelegramBot:
+    def __init__(self):
 
-    updater.start_polling()
-    updater.idle()
+        self.cfg = Cfg('cfg.json')
+        self.updater = Updater(self.cfg.telegramToken)
+        self.updater.dispatcher.add_handler(CommandHandler('bop', bop))
+        self.updater.dispatcher.add_handler(CommandHandler('photo', photo))
+        self.updater.dispatcher.add_handler(CommandHandler('play', play))
+        self.updater.dispatcher.add_handler(CommandHandler('pause', pause))
+        self.updater.dispatcher.add_handler(CommandHandler('next', play_next))
+        self.updater.dispatcher.add_handler(CommandHandler('prev', prev))
+        self.updater.start_polling()
+        self.updater.idle()
 
 
-if __name__ == '__main__':
-    main()
+tb = TelegramBot()
+

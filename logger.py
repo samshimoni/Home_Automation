@@ -1,24 +1,20 @@
 import logging
-import json
 from python_logging_rabbitmq import RabbitMQHandler
+from cfg_automation import Cfg
 
 
 class Logger:
     def __init__(self, service_name):
-
-        f = open('cfg.json',)
-        data = json.load(f)
-        self.name = service_name
+        self.cfg = Cfg('cfg.json')
         self.logger = logging.getLogger(service_name)
         self.logger.setLevel(logging.DEBUG)
 
-        rabbit_params = data['rabbitmq']
-        rabbit = RabbitMQHandler(host=rabbit_params['host'],
-                                 port=rabbit_params['port'],
-                                 exchange=rabbit_params['exchange'],
-                                 routing_key_format=rabbit_params['routing_key_format'],
-                                 username=rabbit_params['username'],
-                                 password=rabbit_params['password'])
+        rabbit = RabbitMQHandler(host=self.cfg.rabbitHost,
+                                 port=self.cfg.rabbitPort,
+                                 exchange=self.cfg.rabbitExchange,
+                                 routing_key_format=self.cfg.rabbitRoutingKey,
+                                 username=self.cfg.rabbitUserName,
+                                 password=self.cfg.rabbitPassword)
 
         self.logger.addHandler(rabbit)
         formatter = logging.Formatter('%(levelname)s | %(asctime)s | %(message)s')

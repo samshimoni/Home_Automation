@@ -11,7 +11,7 @@ try:
 except AttributeError:
     print('Sonos or Apachee is down')
 
-cfg = cfg_automation.Cfg()
+cfg = cfg_automation.Cfg('cfg.json')
 music_server = music_server.MusicServer()
 camera = Camera(cfg.cameraScript)
 logger = logger.Logger('Flask').logger
@@ -76,6 +76,17 @@ def capture():
     else:
         logger.error('Failed Capturing')
         return "Failed"
+
+
+@app.route('/camera/clean', methods=['GET'])
+def clean():
+    if camera.is_alive():
+        camera.clean_dir_from_photos()
+        logger.info('Cleaned')
+        return "Cleaned.."
+    else:
+        logger.error('Failed Capturing')
+        return "Failed Cleaning"
 
 
 if __name__ == '__main__':

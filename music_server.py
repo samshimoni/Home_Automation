@@ -17,7 +17,7 @@ class MusicServer:
         self.sonos_playlist = []
         self.match = {}
         self.playlist = os.listdir('/var/www/html/music')
-        #random.shuffle(self.playlist)
+        random.shuffle(self.playlist)
 
         for item in self.playlist:
             self.sonos_playlist.append('http://{0}/music/{1}'.format(find_my_ip(), item.replace(' ', '%20')))
