@@ -1,8 +1,10 @@
 from telegram import Update
+import os
+import re
 from telegram.ext import Updater, CommandHandler, CallbackContext
 import requests
 import logger
-from cfg_automation import Cfg
+import cfg_automation
 
 
 telegram_logger = logger.Logger('telegramBot').logger
@@ -57,10 +59,14 @@ def photo(update: Update, context: CallbackContext) -> None:
     requests.get('http://127.0.0.1:8000/camera/capture')
 
     try:
-        update.message.bot.send_photo(chat_id=chat_id, photo=open('/home/pi/Desktop/Home_Automation/Camera/{}'.format(files[0]), 'rb'))
+        cfg = cfg_automation.Cfg()
+        files = [f for f in os.listdir('Camera') if re.match(r'[0-9]+.*\.jpg', f)]
+        for file in files:
+            update.message.bot.send_photo(chat_id=chat_id, photo=open(cfg.camera_photos_dir + "/" + file, 'rb'))
+            telegram_logger.info("photo {0} send to {1}".format(file, update.message.chat.first_name))
 
     except FileNotFoundError:
-        print('Could not find any photo to send')
+        telegram_logger.error('could not send photos')
 
     finally:
         requests.get('http://127.0.0.1:8000/camera/clean')
@@ -70,7 +76,7 @@ def photo(update: Update, context: CallbackContext) -> None:
 class TelegramBot:
     def __init__(self):
 
-        self.cfg = Cfg('cfg.json')
+        self.cfg = cfg_automation.Cfg()
         self.updater = Updater(self.cfg.telegramToken)
         self.updater.dispatcher.add_handler(CommandHandler('bop', bop))
         self.updater.dispatcher.add_handler(CommandHandler('photo', photo))

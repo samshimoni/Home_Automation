@@ -18,7 +18,7 @@ class SonosMove(device.Device):
 
     def is_alive(self):
         self.logger.info("is alive response => {}".format(str(len(soco.discover()) > 0)))
-        return str(len(soco.discover()) > 0)
+        return len(soco.discover()) > 0
 
     def play(self):
         self.speaker.play()

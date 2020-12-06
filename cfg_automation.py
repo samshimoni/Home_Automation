@@ -2,8 +2,7 @@ import json
 
 
 class Cfg:
-    def __init__(self, path):
-        self.path = path
+    def __init__(self):
         f = open('cfg.json', )
         data = json.load(f)
 
@@ -30,3 +29,4 @@ class Cfg:
         self.telegramToken = telegram_params['token']
 
         self.cameraScript = camera_params['camera_capture_script']
+        self.camera_photos_dir = camera_params['camera_photos_dir']

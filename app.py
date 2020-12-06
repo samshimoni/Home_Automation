@@ -1,19 +1,22 @@
 from flask import Flask, request
 from sonos import *
 import music_server
-from Camera.camera import Camera
+import Camera.camera
 import cfg_automation
 import logger
 app = Flask(__name__)
 
+
 try:
     sonos = SonosMove()
+    sons_alive = True
 except AttributeError:
     print('Sonos or Apachee is down')
+    sons_alive = False
 
-cfg = cfg_automation.Cfg('cfg.json')
+cfg = cfg_automation.Cfg()
 music_server = music_server.MusicServer()
-camera = Camera(cfg.cameraScript)
+cam = Camera.camera.Camera()
 logger = logger.Logger('Flask').logger
 
 
@@ -24,9 +27,11 @@ def index():
 
 @app.route('/sonos/play', methods=['GET'])
 def play_sonos():
-    if sonos.is_alive():
+    if sons_alive:
         ans = sonos.play()
         return ans
+
+    return "Sonos is off"
 
 
 @app.route('/sonos/show_all', methods=['GET'])
@@ -36,24 +41,31 @@ def show_all():
 
 @app.route('/sonos/pause', methods=['GET'])
 def pause_sonos():
-    if sonos.is_alive():
+    if sons_alive:
         ans = sonos.pause()
         return ans
+    return "Sonos is off"
 
 
 @app.route('/sonos/next', methods=['GET'])
 def sonos_next():
-    return sonos.next()
+    if sons_alive:
+        return sonos.next()
+    return "Sonos is off"
 
 
 @app.route('/sonos/prev', methods=['GET'])
 def sonos_prev():
-    return sonos.prev()
+    if sons_alive:
+        return sonos.prev()
+    return "Sonos is off"
 
 
 @app.route('/sonos/add_music', methods=['GET'])
 def sonos_add_uris():
-    return sonos.add_uri_to_sonos()
+    if sons_alive:
+        return sonos.add_uri_to_sonos()
+    return "Sonos is off"
 
 
 @app.route('/sonos/refresh', methods=['GET'])
@@ -69,8 +81,8 @@ def sonos_up():
 
 @app.route('/camera/capture', methods=['GET'])
 def capture():
-    if camera.is_alive():
-        camera.capture()
+    if cam.is_alive():
+        cam.capture()
         logger.info('Captured')
         return "Capturing.."
     else:
@@ -80,8 +92,8 @@ def capture():
 
 @app.route('/camera/clean', methods=['GET'])
 def clean():
-    if camera.is_alive():
-        camera.clean_dir_from_photos()
+    if cam.is_alive():
+        cam.clean_dir_from_photos()
         logger.info('Cleaned')
         return "Cleaned.."
     else:

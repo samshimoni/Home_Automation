@@ -5,7 +5,7 @@ from cfg_automation import Cfg
 
 class Logger:
     def __init__(self, service_name):
-        self.cfg = Cfg('cfg.json')
+        self.cfg = Cfg()
         self.logger = logging.getLogger(service_name)
         self.logger.setLevel(logging.DEBUG)
 
