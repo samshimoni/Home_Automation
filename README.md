@@ -13,5 +13,12 @@ TelegramBot:
   1. change the flask_server id addres in the cfg.json
   2. docker build ${PATH} 
   3. docker run ${name of the container}
+  
+  MusicServer:
+  1. cd MusicServer
+  2. docker build -t music_server .
+  3. docker run  --network host music_server
+  4. docker exec -it music_server bash
+  5. service apache2 start
 
 
