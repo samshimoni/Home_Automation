@@ -8,6 +8,7 @@ import cfg_automation
 
 
 telegram_logger = logger.Logger('telegramBot').logger
+cfg = cfg_automation.Cfg()
 
 
 def get_url():
@@ -25,31 +26,32 @@ def bop(update: Update, context: CallbackContext) -> None:
 
 def play(update: Update, context: CallbackContext) -> None:
     chat_id = update.message.chat_id
-    requests.get('http://127.0.0.1:8000/sonos/play')
+
+    requests.get('http://{0}:{1}/sonos/play'.format(cfg.flaskAddress, cfg.flaskPort))
     update.message.bot.send_message(chat_id, 'Playing')
 
 
 def pause(update: Update, context: CallbackContext) -> None:
     chat_id = update.message.chat_id
-    requests.get('http://127.0.0.1:8000/sonos/pause')
+    requests.get('http://{0}:{1}/sonos/pause'.format(cfg.flaskAddress, cfg.flaskPort))
     update.message.bot.send_message(chat_id, 'Paused')
 
 
 def play_next(update: Update, context: CallbackContext) -> None:
     chat_id = update.message.chat_id
-    requests.get('http://127.0.0.1:8000/sonos/next')
+    requests.get('http://{0}:{1}/sonos/next'.format(cfg.flaskAddress, cfg.flaskPort))
     update.message.bot.send_message(chat_id, 'Playing Next')
 
 
 def prev(update: Update, context: CallbackContext) -> None:
     chat_id = update.message.chat_id
-    requests.get('http://127.0.0.1:8000/sonos/prev')
+    requests.get('http://{0}:{1}/sonos/prev'.format(cfg.flaskAddress, cfg.flaskPort))
     update.message.bot.send_message(chat_id, 'Playing Previous')
 
 
 def refresh(update: Update, context: CallbackContext) -> None:
     chat_id = update.message.chat_id
-    ans = requests.get('http://127.0.0.1:8000/sonos/refresh').content
+    ans = requests.get('http://{0}:{1}/sonos/refresh'.format(cfg.flaskAddress, cfg.flaskPort)).content
     update.message.bot.send_message(chat_id, '{}'.format(ans.decode()))
     update.message.bot.send_message(chat_id, 'Playing')
 
@@ -76,8 +78,7 @@ def photo(update: Update, context: CallbackContext) -> None:
 class TelegramBot:
     def __init__(self):
 
-        self.cfg = cfg_automation.Cfg()
-        self.updater = Updater(self.cfg.telegramToken)
+        self.updater = Updater(cfg.telegramToken)
         self.updater.dispatcher.add_handler(CommandHandler('bop', bop))
         self.updater.dispatcher.add_handler(CommandHandler('photo', photo))
         self.updater.dispatcher.add_handler(CommandHandler('play', play))
