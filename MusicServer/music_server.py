@@ -1,5 +1,6 @@
 import os
 import random
+import device
 
 
 def find_my_ip():
@@ -11,17 +12,22 @@ def find_my_ip():
     return ip_address
 
 
-class MusicServer:
+class MusicServer(device.Device):
+
+    def is_alive(self):
+        pass
+
     def __init__(self):
-        self.playlist = []
         self.sonos_playlist = []
-        self.match = {}
+        super(MusicServer, self).__init__("MusicServer")
+        self.ip_address = self.cfg.music_server_host
         self.playlist = os.listdir('/var/www/html/music')
-        random.shuffle(self.playlist)
 
         for item in self.playlist:
-            self.sonos_playlist.append('http://{0}/music/{1}'.format(find_my_ip(), item.replace(' ', '%20')))
-        self.match = dict(zip(self.playlist, self.sonos_playlist))
+            self.sonos_playlist.append('http://{0}/music/{1}'
+                                       .format(self.cfg.music_server_host, item.replace(' ', '%20')))
+        random.shuffle(self.sonos_playlist)
+        self.logger.info("music server ip is {}".format(find_my_ip()))
 
     def give_list(self):
         return self.playlist

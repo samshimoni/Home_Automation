@@ -1,0 +1,11 @@
+Flask==1.1.2
+pika==1.1.0
+Pillow==7.0.0
+pygame==2.0.0
+python-logging-rabbitmq==2.0.0
+python-telegram-bot==13.1
+soco==0.20
+tzlocal==2.1
+ubuntu-advantage-tools==20.3
+ubuntu-drivers-common==0.0.0
+requests~=2.22.0

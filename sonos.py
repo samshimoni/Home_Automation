@@ -1,6 +1,7 @@
 import soco
-import music_server
 import device
+import requests
+import json
 
 
 class SonosMove(device.Device):
@@ -23,7 +24,7 @@ class SonosMove(device.Device):
     def play(self):
         self.speaker.play()
         self.logger.info("Playing, {}".format(self._get_current_song()))
-        return "Playing..."
+        return "Playing...".format(self._get_current_song())
 
     def pause(self):
         self.speaker.pause()
@@ -51,9 +52,10 @@ class SonosMove(device.Device):
         return "Going back.."
 
     def _add_uri_to_sonos(self):
-        uri_list = music_server.MusicServer().sonos_playlist
-        for i in uri_list:
-            [self.speaker.add_uri_to_queue(item) for item in uri_list if item.endswith('.mp3')]
+        uri_list = json.loads(requests.get("http://{0}:{1}/music_server/give_uris"
+                                           .format(self.cfg.flaskAddress, self.cfg.flaskPort)).content.decode())['uris']
+
+        [self.speaker.add_uri_to_queue(item) for item in uri_list if item.endswith('.mp3')]
         self.logger.info("add {} into playlist".format(len(uri_list)))
         return "Added all into queue"
 
@@ -66,3 +68,9 @@ class SonosMove(device.Device):
 
     def _get_current_song(self):
         return self.speaker.get_current_track_info()['title']
+
+
+sonos = SonosMove()
+sonos.next()
+sonos.next()
+sonos.play()
