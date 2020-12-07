@@ -4,20 +4,25 @@ import music_server
 import Camera.camera
 import cfg_automation
 import logger
-app = Flask(__name__)
 
+app = Flask(__name__)
+cfg = cfg_automation.Cfg()
+logger = logger.Logger('Flask').logger
 
 try:
     sonos = SonosMove()
-    sons_alive = True
 except AttributeError:
-    print('Sonos or Apachee is down')
-    sons_alive = False
+    logger.error("Problem with connection to Sonos Speaker")
 
-cfg = cfg_automation.Cfg()
-music_server = music_server.MusicServer()
-cam = Camera.camera.Camera()
-logger = logger.Logger('Flask').logger
+try:
+    music_server = music_server.MusicServer()
+except AttributeError:
+    logger.error("Problem with connection to Music Server")
+
+try:
+    cam = Camera.camera.Camera()
+except AttributeError:
+    logger.error("Problem with connection to Camera")
 
 
 @app.route('/', methods=['GET'])
@@ -27,11 +32,8 @@ def index():
 
 @app.route('/sonos/play', methods=['GET'])
 def play_sonos():
-    if sons_alive:
-        ans = sonos.play()
-        return ans
-
-    return "Sonos is off"
+    ans = sonos.play()
+    return ans
 
 
 @app.route('/sonos/show_all', methods=['GET'])
@@ -41,31 +43,23 @@ def show_all():
 
 @app.route('/sonos/pause', methods=['GET'])
 def pause_sonos():
-    if sons_alive:
-        ans = sonos.pause()
-        return ans
-    return "Sonos is off"
+    ans = sonos.pause()
+    return ans
 
 
 @app.route('/sonos/next', methods=['GET'])
 def sonos_next():
-    if sons_alive:
-        return sonos.next()
-    return "Sonos is off"
+    return sonos.next()
 
 
 @app.route('/sonos/prev', methods=['GET'])
 def sonos_prev():
-    if sons_alive:
-        return sonos.prev()
-    return "Sonos is off"
+    return sonos.prev()
 
 
 @app.route('/sonos/add_music', methods=['GET'])
 def sonos_add_uris():
-    if sons_alive:
-        return sonos.add_uri_to_sonos()
-    return "Sonos is off"
+    return sonos.add_uri_to_sonos()
 
 
 @app.route('/sonos/refresh', methods=['GET'])

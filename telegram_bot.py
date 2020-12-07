@@ -77,7 +77,6 @@ def photo(update: Update, context: CallbackContext) -> None:
 
 class TelegramBot:
     def __init__(self):
-
         self.updater = Updater(cfg.telegramToken)
         self.updater.dispatcher.add_handler(CommandHandler('bop', bop))
         self.updater.dispatcher.add_handler(CommandHandler('photo', photo))
@@ -90,4 +89,3 @@ class TelegramBot:
 
 
 tb = TelegramBot()
-
