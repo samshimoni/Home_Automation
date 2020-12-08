@@ -62,7 +62,7 @@ def photo(update: Update, context: CallbackContext) -> None:
 
     try:
         cfg = cfg_automation.Cfg()
-        files = [f for f in os.listdir('Camera') if re.match(r'[0-9]+.*\.jpg', f)]
+        files = [f for f in os.listdir('../Camera') if re.match(r'[0-9]+.*\.jpg', f)]
         for file in files:
             update.message.bot.send_photo(chat_id=chat_id, photo=open(cfg.camera_photos_dir + "/" + file, 'rb'))
             telegram_logger.info("photo {0} send to {1}".format(file, update.message.chat.first_name))
