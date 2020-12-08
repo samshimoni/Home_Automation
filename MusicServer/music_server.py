@@ -13,15 +13,11 @@ def find_my_ip():
 
 
 class MusicServer(device.Device):
-
-    def is_alive(self):
-        pass
-
     def __init__(self):
         self.sonos_playlist = []
-        super(MusicServer, self).__init__("MusicServer")
+        super(MusicServer, self).__init__(__name__)
         self.ip_address = self.cfg.music_server_host
-        self.playlist = os.listdir('/var/www/html/music')
+        self.playlist = os.listdir(self.cfg.music_server_src)
 
         for item in self.playlist:
             self.sonos_playlist.append('http://{0}/music/{1}'
@@ -34,3 +30,6 @@ class MusicServer(device.Device):
 
     def give_uris(self):
         return self.sonos_playlist
+
+    def is_alive(self):
+        pass

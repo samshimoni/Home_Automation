@@ -3,7 +3,7 @@ import music_server
 import cfg_automation
 import logger
 cfg = cfg_automation.Cfg()
-logger = logger.Logger('Flask').logger
+logger = logger.Logger('FlaskMusicServer').logger
 
 app = Flask(__name__)
 
@@ -30,11 +30,6 @@ def give_uris():
     music_uris = music_server.give_uris()
     return_dict = {'uris': music_uris}
     return jsonify(return_dict)
-
-
-@app.route('/music_server/test', methods=['GET'])
-def test():
-    return "Test"
 
 
 if __name__ == '__main__':

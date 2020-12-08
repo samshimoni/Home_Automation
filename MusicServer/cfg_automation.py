@@ -3,7 +3,7 @@ import json
 
 class Cfg:
     def __init__(self):
-        f = open('cfg.json', )
+        f = open('./cfg.json', )
         data = json.load(f)
 
         rabbit_params = data['rabbitmq']
@@ -21,3 +21,4 @@ class Cfg:
         self.flaskPort = flask_params['port']
 
         self.music_server_host = music_server_params['host']
+        self.music_server_src = music_server_params['music_server_src']
