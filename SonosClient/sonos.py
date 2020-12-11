@@ -53,11 +53,12 @@ class SonosMove(device.Device):
 
     def _add_uri_to_sonos(self):
         uri_list = json.loads(requests.get("http://{0}:{1}/music_server/give_uris"
-                                           .format(self.cfg.music_server_host,
-                                                   self.cfg.music_server_port)).content.decode())['uris']
+                                           .format(self.cfg.music_flask_host,
+                                                   self.cfg.music_flask_port)).content.decode())['uris']
 
         [self.speaker.add_uri_to_queue(item) for item in uri_list if item.endswith('.mp3')]
         self.logger.info("add {} into playlist".format(len(uri_list)))
+        self.speaker.play()
         return "Added all into queue"
 
     def refresh(self):
@@ -69,9 +70,3 @@ class SonosMove(device.Device):
 
     def _get_current_song(self):
         return self.speaker.get_current_track_info()['title']
-
-
-sonos = SonosMove()
-sonos.next()
-sonos.next()
-sonos.play()

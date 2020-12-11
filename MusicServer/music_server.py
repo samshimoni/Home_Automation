@@ -18,6 +18,7 @@ class MusicServer(device.Device):
         super(MusicServer, self).__init__(__name__)
         self.ip_address = self.cfg.music_server_host
         self.playlist = os.listdir(self.cfg.music_server_src)
+        self.logger.info("Music Server Started")
 
         for item in self.playlist:
             self.sonos_playlist.append('http://{0}/music/{1}'

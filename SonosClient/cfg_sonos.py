@@ -8,7 +8,7 @@ class Cfg:
 
         rabbit_params = data['rabbitmq']
         flask_params = data['flask']
-        music_server_params = data['music_server']
+        music_server_params = data['music_flask_server']
 
         self.rabbit_host = rabbit_params['host']
         self.rabbit_port = rabbit_params['port']
@@ -20,5 +20,5 @@ class Cfg:
         self.flask_host = flask_params['host']
         self.flask_port = flask_params['port']
 
-        self.music_server_host = music_server_params['host']
-        self.music_server_port = music_server_params['port']
+        self.music_flask_host = music_server_params['host']
+        self.music_flask_port = music_server_params['port']
