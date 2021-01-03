@@ -39,7 +39,9 @@ class PlantWatering(device.Device):
                 wet = self.get_status() == 0
 
             GPIO.cleanup()
-            print('Plant is no Longer dry... satisfied after {} times'.format(consecutive_water_count))
+            response = 'Plant is no Longer dry... satisfied after {} times'.format(consecutive_water_count)
+            print(response)
+            return response
 
         except KeyboardInterrupt:  # If CTRL+C is pressed, exit cleanly:
             GPIO.cleanup()  # cleanup all GPI
@@ -54,5 +56,4 @@ class PlantWatering(device.Device):
         GPIO.output(self.pump_pin, GPIO.HIGH)
 
 
-gardener = PlantWatering()
-gardener.auto_water()
+PlantWatering().auto_water()
