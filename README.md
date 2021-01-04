@@ -4,6 +4,8 @@ run:
 
 rabbitmq:
   1. docker run -d -it --name rabbit --hostname rabbit -p 30000:5672 -p 30001:15672 rabbitmq:management
+  2. enter rabbithost:3001 and create Queue wite the name 'logs' and an exchange with the same name.
+  3. bind them with routing key : logs-api-1	
 
 ELK:
   1. git clone https://github.com/deviantony/docker-elk
@@ -11,14 +13,17 @@ ELK:
   
 TelegramBot:
   1. change the flask_server id addres in the cfg.json
-  2. docker build ${PATH} 
+  2. docker build -t telegram_bot ${TELEGRAM_BOT_DIR} 
   3. docker run ${name of the container}
   
-  MusicServer:
+ MusicServer:
   1. cd MusicServer
   2. docker build -t music_server .
   3. docker run  --network host music_server
   4. docker exec -it music_server bash
   5. service apache2 start
+  
+ PlantWatering:
+ 1. run app.py or use auto_water.py
 
 
