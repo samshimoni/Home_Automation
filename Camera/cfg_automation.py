@@ -3,13 +3,15 @@ import json
 
 class Cfg:
     def __init__(self):
-        f = open('./cfg.json', )
+        f = open('cfg.json', )
         data = json.load(f)
 
         rabbit_params = data['rabbitmq']
         flask_params = data['flask']
-        plant_params = data['Plant']
-        mail_params = data['Mail']
+
+        telegram_params = data['telegram']
+        sensibu_params = data['sensibu']
+        camera_params = data['camera']
 
         self.rabbitHost = rabbit_params['host']
         self.rabbitPort = rabbit_params['port']
@@ -21,15 +23,10 @@ class Cfg:
         self.flaskAddress = flask_params['host']
         self.flaskPort = flask_params['port']
 
-        self.pumpPin = plant_params['pump_pin']
-        self.waterSensorPin = plant_params['water_sensor_pin']
-        self.waterDelay = plant_params['delay']
+        self.sensibuUri = sensibu_params['uri']
+        self.sensibuToken = sensibu_params['token']
 
-        self.subject = mail_params['subject']
-        self.frm = mail_params['from']
-        self.to = mail_params['to']
-        self.message = mail_params['message']
-        self.userName = mail_params['username']
-        self.password = mail_params['password']
+        self.telegramToken = telegram_params['token']
 
-
+        self.cameraScript = camera_params['camera_capture_script']
+        self.camera_photos_dir = camera_params['camera_photos_dir']

@@ -2,6 +2,7 @@ import RPi.GPIO as GPIO
 import datetime
 import time
 import device
+import mail_sender
 
 
 def init_output(pin):
@@ -18,6 +19,7 @@ class PlantWatering(device.Device):
         self.pump_pin = self.cfg.pumpPin
         self.water_sensor_pin = self.cfg.waterSensorPin
         self.delay = self.cfg.waterDelay
+        self.mail = mail_sender.MailSender()
 
     def is_alive(self):
         pass
@@ -40,6 +42,7 @@ class PlantWatering(device.Device):
             GPIO.cleanup()
             response = 'Plant is no Longer dry... satisfied after {} times'.format(consecutive_water_count)
             self.logger.info(response)
+            self.mail.send_mail()
             return response
 
         except KeyboardInterrupt:
