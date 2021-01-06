@@ -29,9 +29,8 @@ class PlantWatering(device.Device):
     def auto_water(self):
         consecutive_water_count = 0
         init_output(self.pump_pin)
-        print("Here we go! Press CTRL+C to exit")
         try:
-            wet = self.is_alive() == 0
+            wet = self.get_status() == 0
             while wet is False and consecutive_water_count < 10:
                 time.sleep(self.delay)
                 self.pump_on()
@@ -40,11 +39,11 @@ class PlantWatering(device.Device):
 
             GPIO.cleanup()
             response = 'Plant is no Longer dry... satisfied after {} times'.format(consecutive_water_count)
-            print(response)
+            self.logger.info(response)
             return response
 
-        except KeyboardInterrupt:  # If CTRL+C is pressed, exit cleanly:
-            GPIO.cleanup()  # cleanup all GPI
+        except KeyboardInterrupt:
+            GPIO.cleanup()
 
     def pump_on(self):
         init_output(self.pump_pin)

@@ -12,7 +12,7 @@ def index():
 
 @app.route('/plant/auto_water', methods=['GET'])
 def auto_water():
-    os.system('python3 /home/pi/Desktop/PlantWatering/auto_water.py')
+    os.system('./auto_water.py')
     return "Activated"
 
 
