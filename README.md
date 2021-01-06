@@ -25,5 +25,6 @@ TelegramBot:
   
  PlantWatering:
  1. run app.py or use auto_water.py
+ 2. in linux systems : "use cronteb -e" => 30 12 * * 1 wget http://localhost:8000/plant/auto_water
 
 
