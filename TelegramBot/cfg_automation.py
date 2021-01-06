@@ -8,7 +8,7 @@ class Cfg:
 
         rabbit_params = data['rabbitmq']
         flask_params = data['flask']
-
+        plant_params = data['plant']
         telegram_params = data['telegram']
 
         self.rabbitHost = rabbit_params['host']
@@ -20,5 +20,8 @@ class Cfg:
 
         self.flaskAddress = flask_params['host']
         self.flaskPort = flask_params['port']
+
+        self.plantAddress = plant_params['host']
+        self.plantPort = plant_params['port']
 
         self.telegramToken = telegram_params['token']

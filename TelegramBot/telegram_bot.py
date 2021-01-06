@@ -24,6 +24,13 @@ def bop(update: Update, context: CallbackContext) -> None:
     update.message.bot.send_photo(chat_id, url)
 
 
+def plant_water(update: Update, context: CallbackContext) -> None:
+    chat_id = update.message.chat_id
+    telegram_logger.info('Watering plant')
+    requests.get('http://{0}:{1}/plant/auto_water'.format(cfg.plantAddress, cfg.plantPort))
+    update.message.bot.send_message(chat_id, "Plant was Watered")
+
+
 def play(update: Update, context: CallbackContext) -> None:
     chat_id = update.message.chat_id
 
@@ -84,6 +91,7 @@ class TelegramBot:
         self.updater.dispatcher.add_handler(CommandHandler('pause', pause))
         self.updater.dispatcher.add_handler(CommandHandler('next', play_next))
         self.updater.dispatcher.add_handler(CommandHandler('prev', prev))
+        self.updater.dispatcher.add_handler(CommandHandler('plant', plant_water))
         self.updater.start_polling()
         self.updater.idle()
 
