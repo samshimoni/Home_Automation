@@ -4,8 +4,7 @@ run:
 
 rabbitmq:
   1. docker run -d -it --name rabbit --hostname rabbit -p 30000:5672 -p 30001:15672 rabbitmq:management
-  2. enter rabbithost:3001 and create Queue wite the name 'logs' and an exchange with the same name.
-  3. bind them with routing key : logs-api-1	
+  2. run init_rabbit.py in order to create logging exchange and queue.
 
 ELK:
   1. git clone https://github.com/deviantony/docker-elk
