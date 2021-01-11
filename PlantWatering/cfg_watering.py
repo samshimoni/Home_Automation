@@ -14,6 +14,8 @@ class Cfg:
         self.rabbitHost = rabbit_params['host']
         self.rabbitPort = rabbit_params['port']
         self.rabbitExchange = rabbit_params['exchange']
+        self.rabbitExchangeType = rabbit_params['exchange_type']
+        self.rabbitQueue = rabbit_params['queue']
         self.rabbitRoutingKey = rabbit_params['routing_key_format']
         self.rabbitUserName = rabbit_params['username']
         self.rabbitPassword = rabbit_params['password']
