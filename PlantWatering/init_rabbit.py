@@ -11,7 +11,7 @@ connection = pika.BlockingConnection(pika.ConnectionParameters(host=cfg.rabbitHo
 
 channel = connection.channel()
 
-channel.queue_declare(queue=cfg.rabbitQueue)
+channel.queue_declare(queue=cfg.rabbitQueue, durable=True)
 
 channel.exchange_declare(exchange=cfg.rabbitExchange, exchange_type=cfg.rabbitExchangeType)
 
