@@ -6,6 +6,7 @@ ELK:
   1. git clone https://github.com/deviantony/docker-elk
   2. enter docker-elk and docker-compose up
   3. add to docker-compose.yml file the configurations for rabbit : 
+    
     rabbitmq:
     image: rabbitmq:management
     container_name: rabbit
