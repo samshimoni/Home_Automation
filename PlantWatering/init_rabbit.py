@@ -1,3 +1,4 @@
+#! /usr/bin/python3
 import pika
 import cfg_watering
 
