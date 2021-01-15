@@ -30,7 +30,6 @@ class Cfg:
         self.subject = mail_params['subject']
         self.frm = mail_params['from']
         self.to = mail_params['to']
-        self.message = mail_params['message']
         self.userName = mail_params['username']
         self.password = mail_params['password']
 

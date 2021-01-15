@@ -30,5 +30,4 @@ class MailSender(Device):
             self.logger.info('Success : Mail sent!')
 
         except Exception as e:
-
             self.logger.error('Failed to send the mail! \n {}'.format(e))

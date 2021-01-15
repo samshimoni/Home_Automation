@@ -29,7 +29,6 @@ def plant_water(update: Update, context: CallbackContext) -> None:
     telegram_logger.info('Watering plant')
     response = requests.get('http://{0}:{1}/plant/auto_water'.format(cfg.plantAddress, cfg.plantPort)).content
     update.message.bot.send_message(chat_id, response.decode())
-    telegram_logger.info(response)
 
 
 def play(update: Update, context: CallbackContext) -> None:

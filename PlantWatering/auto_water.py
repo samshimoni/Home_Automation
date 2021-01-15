@@ -42,7 +42,11 @@ class PlantWatering(device.Device):
                 wet = self.get_status() == 0
 
             GPIO.cleanup()
-            response = 'Plant is no Longer dry... satisfied after {} times'.format(consecutive_water_count)
+            if consecutive_water_count == 0:
+                response = 'Plant doesnt need any watering'
+            else:
+                response = 'Plant is no Longer dry... satisfied after {} times'.format(consecutive_water_count)
+
             self.logger.info(response)
             self.mail.send_mail(response)
             return response
