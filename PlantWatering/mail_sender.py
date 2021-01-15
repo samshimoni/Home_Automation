@@ -12,12 +12,12 @@ class MailSender(Device):
     def __init__(self):
         super(MailSender, self).__init__(__name__)
 
-    def send_mail(self):
+    def send_mail(self, to_send):
         msg = MIMEMultipart()
         msg['Subject'] = self.cfg.subject
         msg['From'] = self.cfg.frm
         msg['To'] = self.cfg.to
-        message = MIMEText(self.cfg.message)
+        message = MIMEText(to_send)
         msg.attach(message)
         try:
             s = smtplib.SMTP('smtp.gmail.com:587')
@@ -27,8 +27,8 @@ class MailSender(Device):
             s.login(self.cfg.userName, self.cfg.password)
             s.sendmail(self.cfg.frm, self.cfg.to, msg.as_string())
             s.quit()
-            print('Success : Mail sent!')
+            self.logger.info('Success : Mail sent!')
 
         except Exception as e:
 
-            print('Failed to send the mail! \n {}'.format(e))
+            self.logger.error('Failed to send the mail! \n {}'.format(e))

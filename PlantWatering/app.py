@@ -1,4 +1,5 @@
 from flask import Flask, request
+import subprocess
 import cfg_watering
 import os
 app = Flask(__name__)
@@ -12,8 +13,10 @@ def index():
 
 @app.route('/plant/auto_water', methods=['GET'])
 def auto_water():
-    os.system('./auto_water.py')
-    return "Activated"
+    proc = subprocess.Popen(['./auto_water.py'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    response = proc.stdout.read().decode()
+    #os.system('./auto_water.py')
+    return response
 
 
 if __name__ == '__main__':

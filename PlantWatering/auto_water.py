@@ -44,7 +44,7 @@ class PlantWatering(device.Device):
             GPIO.cleanup()
             response = 'Plant is no Longer dry... satisfied after {} times'.format(consecutive_water_count)
             self.logger.info(response)
-            self.mail.send_mail()
+            self.mail.send_mail(response)
             return response
 
         except KeyboardInterrupt:

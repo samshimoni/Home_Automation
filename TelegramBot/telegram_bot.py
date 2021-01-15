@@ -27,8 +27,8 @@ def bop(update: Update, context: CallbackContext) -> None:
 def plant_water(update: Update, context: CallbackContext) -> None:
     chat_id = update.message.chat_id
     telegram_logger.info('Watering plant')
-    requests.get('http://{0}:{1}/plant/auto_water'.format(cfg.plantAddress, cfg.plantPort))
-    update.message.bot.send_message(chat_id, "Plant was Watered")
+    response = requests.get('http://{0}:{1}/plant/auto_water'.format(cfg.plantAddress, cfg.plantPort)).content
+    update.message.bot.send_message(chat_id, response.decode())
 
 
 def play(update: Update, context: CallbackContext) -> None:

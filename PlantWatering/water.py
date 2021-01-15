@@ -1,4 +1,5 @@
-# External module imp
+#! /usr/bin/python3
+
 import RPi.GPIO as GPIO
 import datetime
 import time
