@@ -18,11 +18,7 @@ ELK:
   3. enter docker-elk and docker-compose up
   
 rabbitmq:
-  1. docker run -d -it --name rabbit --hostname rabbit -p 30000:5672 -p 30001:15672 rabbitmq:management 
-     (not needed if docker-elk is configured to run rabbit as well)
-  
-  2. run init_rabbit.py in order to create logging exchange and queue.
-
+  1. run init_rabbit.py in order to create logging exchange and queue.
 
 TelegramBot:
   1. change the flask_server id addres in the cfg.json
@@ -39,5 +35,10 @@ TelegramBot:
  PlantWatering:
  1. run app.py or use auto_water.py
  2. in linux systems : use "cronteb -e" => '30 12 * * 1 wget http://localhost:8000/plant/auto_water'
+ 
+ 
+ old:
+  1. docker run -d -it --name rabbit --hostname rabbit -p 30000:5672 -p 30001:15672 rabbitmq:management 
+     
 
 
