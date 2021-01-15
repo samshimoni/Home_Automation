@@ -15,7 +15,6 @@ def index():
 def auto_water():
     proc = subprocess.Popen(['./auto_water.py'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     response = proc.stdout.read().decode()
-    #os.system('./auto_water.py')
     return response
 
 
