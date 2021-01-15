@@ -3,8 +3,10 @@
 run:
 
 ELK:
-  1. git clone https://github.com/deviantony/docker-elk
-  
+  1. 
+    a.git clone https://github.com/deviantony/docker-elk (for x86) 
+    b.git clone https://github.com/stefanwalther/rpi-docker-elk.git (for Arm)
+    
   2. add to docker-compose.yml file the configurations for rabbit : 
     
     rabbitmq:
@@ -15,6 +17,19 @@ ELK:
       - "30000:5672"
       - "30001:15672"
       
+  2. enter logstash.conf and add rabbitmq:
+    
+    input {
+    rabbitmq {
+        port => 30000
+        host => "10.0.0.11"
+	  queue => "logs"
+        durable => true
+	  exchange => "logs"
+	  key => "logs-api-1"
+      }
+    }
+  
   3. enter docker-elk and docker-compose up
   
 rabbitmq:
