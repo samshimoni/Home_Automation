@@ -1,8 +1,8 @@
 # Home_Automation
 
 rabbitmq:
-1. docker run -d -it --name rabbit --hostname rabbit -p 30000:5672 -p 30001:15672 rabbitmq:management
-2. ./initRabbit.py in order to create logging exchange and queue.
+  1. docker run -d -it --name rabbit --hostname rabbit -p 30000:5672 -p 30001:15672 rabbitmq:management
+  2. ./initRabbit.py in order to create logging exchange and queue.
 
 
 ELK:
@@ -16,7 +16,7 @@ ELK:
     input {
     rabbitmq {
         port => 30000
-        host => "10.0.0.11"
+        host => "yourIpAddress"
 	  queue => "logs"
         durable => true
 	  exchange => "logs"
