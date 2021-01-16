@@ -3,7 +3,7 @@ import music_server
 import cfg_automation
 import logger
 cfg = cfg_automation.Cfg()
-logger = logger.Logger('FlaskMusicServer').logger
+logger = logger.Logger('MusicServer').logger
 
 app = Flask(__name__)
 

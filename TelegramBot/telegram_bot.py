@@ -4,11 +4,11 @@ import re
 from telegram.ext import Updater, CommandHandler, CallbackContext
 import requests
 import logger
-import cfg_automation
+import cfg_telegram
 
 
 telegram_logger = logger.Logger('telegramBot').logger
-cfg = cfg_automation.Cfg()
+cfg = cfg_telegram.Cfg()
 
 
 def get_url():
@@ -68,7 +68,7 @@ def photo(update: Update, context: CallbackContext) -> None:
     requests.get('http://127.0.0.1:8000/camera/capture')
 
     try:
-        cfg = cfg_automation.Cfg()
+        cfg = cfg_telegram.Cfg()
         files = [f for f in os.listdir('../Camera') if re.match(r'[0-9]+.*\.jpg', f)]
         for file in files:
             update.message.bot.send_photo(chat_id=chat_id, photo=open(cfg.camera_photos_dir + "/" + file, 'rb'))

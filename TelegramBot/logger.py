@@ -1,6 +1,6 @@
 import logging
 from python_logging_rabbitmq import RabbitMQHandler
-from cfg_automation import Cfg
+from cfg_telegram import Cfg
 
 
 class Logger:

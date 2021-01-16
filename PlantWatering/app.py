@@ -1,7 +1,6 @@
-from flask import Flask, request
+from flask import Flask
 import subprocess
 import cfg_watering
-import os
 app = Flask(__name__)
 cfg = cfg_watering.Cfg()
 

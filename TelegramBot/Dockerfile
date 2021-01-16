@@ -5,7 +5,7 @@ WORKDIR /usr/src/app
 
 COPY telegram_bot.py /usr/src/app
 COPY cfg.json /usr/src/app
-COPY cfg_automation.py /usr/src/app
+COPY cfg_telegram.py /usr/src/app
 COPY logger.py /usr/src/app
 
 RUN pip3 install --user app legofy==1.0.0 \
