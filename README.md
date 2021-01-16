@@ -1,6 +1,6 @@
 # Home_Automation
 
-RabbitMq:
+rabbitmq:
 1. docker run -d -it --name rabbit --hostname rabbit -p 30000:5672 -p 30001:15672 rabbitmq:management
 2. ./initRabbit.py in order to create logging exchange and queue.
 
