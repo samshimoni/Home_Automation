@@ -34,31 +34,31 @@ def plant_water(update: Update, context: CallbackContext) -> None:
 def play(update: Update, context: CallbackContext) -> None:
     chat_id = update.message.chat_id
 
-    requests.get('http://{0}:{1}/sonos/play'.format(cfg.flaskAddress, cfg.flaskPort))
+    requests.get('http://{0}:{1}/sonos/play'.format(cfg.sonosAddress, cfg.sonosPort))
     update.message.bot.send_message(chat_id, 'Playing')
 
 
 def pause(update: Update, context: CallbackContext) -> None:
     chat_id = update.message.chat_id
-    requests.get('http://{0}:{1}/sonos/pause'.format(cfg.flaskAddress, cfg.flaskPort))
+    requests.get('http://{0}:{1}/sonos/pause'.format(cfg.sonosAddress, cfg.sonosPort))
     update.message.bot.send_message(chat_id, 'Paused')
 
 
 def play_next(update: Update, context: CallbackContext) -> None:
     chat_id = update.message.chat_id
-    requests.get('http://{0}:{1}/sonos/next'.format(cfg.flaskAddress, cfg.flaskPort))
+    requests.get('http://{0}:{1}/sonos/next'.format(cfg.sonosAddress, cfg.sonosPort))
     update.message.bot.send_message(chat_id, 'Playing Next')
 
 
 def prev(update: Update, context: CallbackContext) -> None:
     chat_id = update.message.chat_id
-    requests.get('http://{0}:{1}/sonos/prev'.format(cfg.flaskAddress, cfg.flaskPort))
+    requests.get('http://{0}:{1}/sonos/prev'.format(cfg.sonosAddress, cfg.sonosPort))
     update.message.bot.send_message(chat_id, 'Playing Previous')
 
 
 def refresh(update: Update, context: CallbackContext) -> None:
     chat_id = update.message.chat_id
-    ans = requests.get('http://{0}:{1}/sonos/refresh'.format(cfg.flaskAddress, cfg.flaskPort)).content
+    ans = requests.get('http://{0}:{1}/sonos/refresh'.format(cfg.sonosAddress, cfg.sonosPort)).content
     update.message.bot.send_message(chat_id, '{}'.format(ans.decode()))
     update.message.bot.send_message(chat_id, 'Playing')
 

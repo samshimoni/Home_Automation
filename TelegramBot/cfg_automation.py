@@ -10,6 +10,7 @@ class Cfg:
         flask_params = data['flask']
         plant_params = data['plant']
         telegram_params = data['telegram']
+        sonos_params = data['sonos']
 
         self.rabbitHost = rabbit_params['host']
         self.rabbitPort = rabbit_params['port']
@@ -23,5 +24,8 @@ class Cfg:
 
         self.plantAddress = plant_params['host']
         self.plantPort = plant_params['port']
+
+        self.sonosAddress = sonos_params['host']
+        self.sonosPort = sonos_params['port']
 
         self.telegramToken = telegram_params['token']
