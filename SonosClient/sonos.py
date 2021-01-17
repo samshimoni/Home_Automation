@@ -55,8 +55,11 @@ class SonosMove(device.Device):
         uri_list = json.loads(requests.get("http://{0}:{1}/music_server/give_uris"
                                            .format(self.cfg.music_flask_host,
                                                    self.cfg.music_flask_port)).content.decode())['uris']
+        try:
+            [self.speaker.add_uri_to_queue(item) for item in uri_list if item.endswith('.mp3')]
+        except Exception as e:
+            self.logger.error(e)
 
-        [self.speaker.add_uri_to_queue(item) for item in uri_list if item.endswith('.mp3')]
         self.logger.info("add {} into playlist".format(len(uri_list)))
         self.speaker.play()
         return "Added all into queue"
