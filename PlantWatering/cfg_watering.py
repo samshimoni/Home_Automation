@@ -23,7 +23,10 @@ class Cfg:
         self.flaskAddress = flask_params['host']
         self.flaskPort = flask_params['port']
 
-        self.pumpPin = plant_params['pump_pin']
+        self.pump_1_pin = plant_params['pump_1_pin']
+        self.pump_2_pin = plant_params['pump_2_pin']
+        self.pump_3_pin = plant_params['pump_3_pin']
+        self.pump_4_pin = plant_params['pump_4_pin']
         self.waterSensorPin = plant_params['water_sensor_pin']
         self.waterDelay = plant_params['delay']
 

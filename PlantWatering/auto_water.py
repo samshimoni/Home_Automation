@@ -1,51 +1,40 @@
 #! /usr/bin/env python3
+from abc import ABC
 
 import RPi.GPIO as GPIO
-import datetime
 import time
 import device
 import mail_sender
 
 
-def init_output(pin):
-    GPIO.setup(pin, GPIO.OUT)
-    GPIO.output(pin, GPIO.LOW)
-    GPIO.output(pin, GPIO.HIGH)
-
-
-class PlantWatering(device.Device):
+class PlantWatering(device.Device, ABC):
+    def is_alive(self):
+        pass
 
     def __init__(self):
         super(PlantWatering, self).__init__(__name__)
-        GPIO.setmode(GPIO.BOARD)
-        self.pump_pin = self.cfg.pumpPin
+        GPIO.setmode(GPIO.BCM)
+        self.pinList = [self.cfg.pump_1_pin, self.cfg.pump_2_pin, self.cfg.pump_3_pin, self.cfg.pump_4_pin]
         self.water_sensor_pin = self.cfg.waterSensorPin
         self.delay = self.cfg.waterDelay
         self.mail = mail_sender.MailSender()
 
-    def is_alive(self):
-        pass
+    def init_output(self):
+        for i in self.pinList:
+            GPIO.setup(i, GPIO.OUT)
+            GPIO.output(i, GPIO.HIGH)
 
-    def get_status(self):
-        GPIO.setup(self.water_sensor_pin, GPIO.IN)
-        return GPIO.input(self.water_sensor_pin)
-
-    def auto_water(self):
+    def auto_water(self, pin_number):
         consecutive_water_count = 0
-        init_output(self.pump_pin)
+        self.init_output()
         try:
-            wet = self.get_status() == 0
-            while wet is False and consecutive_water_count < 10:
+            while consecutive_water_count < 3:
                 time.sleep(self.delay)
-                self.pump_on()
+                self.pump_on(pin_number)
                 consecutive_water_count += 1
-                wet = self.get_status() == 0
 
             GPIO.cleanup()
-            if consecutive_water_count == 0:
-                response = 'Plant doesnt need any watering'
-            else:
-                response = 'Plant is no Longer dry... satisfied after {} times'.format(consecutive_water_count)
+            response = 'Plant is no Longer dry... satisfied after {} times'.format(consecutive_water_count)
 
             self.logger.info(response)
             self.mail.send_mail(response)
@@ -54,14 +43,8 @@ class PlantWatering(device.Device):
         except KeyboardInterrupt:
             GPIO.cleanup()
 
-    def pump_on(self):
-        init_output(self.pump_pin)
-        f = open("last_watered.txt", "w")
-        f.write("Last watered {}".format(datetime.datetime.now()))
-        f.close()
-        GPIO.output(self.pump_pin, GPIO.LOW)
+    def pump_on(self, pin_number):
+        self.init_output()
+        GPIO.output(pin_number, GPIO.LOW)
         time.sleep(1)
-        GPIO.output(self.pump_pin, GPIO.HIGH)
-
-
-PlantWatering().auto_water()
+        GPIO.output(pin_number, GPIO.HIGH)
