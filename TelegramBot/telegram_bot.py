@@ -24,10 +24,19 @@ def bop(update: Update, context: CallbackContext) -> None:
     update.message.bot.send_photo(chat_id, url)
 
 
-def plant_water(update: Update, context: CallbackContext) -> None:
+def plant_water_1(update: Update, context: CallbackContext) -> None:
     chat_id = update.message.chat_id
     telegram_logger.info('Watering plant')
-    response = requests.get('http://{0}:{1}/plant/auto_water'.format(cfg.plantAddress, cfg.plantPort)).content
+    response = requests.get('http://{0}:{1}/plant/auto_water?pin_number=2'.format
+                            (cfg.plantAddress, cfg.plantPort)).content
+    update.message.bot.send_message(chat_id, 'watering.. wait for mail please..')
+
+
+def plant_water_2(update: Update, context: CallbackContext) -> None:
+    chat_id = update.message.chat_id
+    telegram_logger.info('Watering plant')
+    response = requests.get('http://{0}:{1}/plant/auto_water?pin_number=3'.format
+                            (cfg.plantAddress, cfg.plantPort)).content
     update.message.bot.send_message(chat_id, 'watering.. wait for mail please..')
 
 
@@ -91,7 +100,8 @@ class TelegramBot:
         self.updater.dispatcher.add_handler(CommandHandler('pause', pause))
         self.updater.dispatcher.add_handler(CommandHandler('next', play_next))
         self.updater.dispatcher.add_handler(CommandHandler('prev', prev))
-        self.updater.dispatcher.add_handler(CommandHandler('plant', plant_water))
+        self.updater.dispatcher.add_handler(CommandHandler('plant1', plant_water_1))
+        self.updater.dispatcher.add_handler(CommandHandler('plant2', plant_water_2))
         self.updater.start_polling()
         self.updater.idle()
 
