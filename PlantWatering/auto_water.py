@@ -5,6 +5,7 @@ import RPi.GPIO as GPIO
 import time
 import device
 import mail_sender
+import capacitive_sensor
 
 
 class PlantWatering(device.Device, ABC):
@@ -18,6 +19,7 @@ class PlantWatering(device.Device, ABC):
         self.water_sensor_pin = self.cfg.waterSensorPin
         self.delay = self.cfg.waterDelay
         self.mail = mail_sender.MailSender()
+        self.moisture_sensor = capacitive_sensor.MoistureSensor()
 
     def init_output(self):
         for i in self.pinList:
@@ -28,13 +30,17 @@ class PlantWatering(device.Device, ABC):
         consecutive_water_count = 0
         self.init_output()
         try:
-            while consecutive_water_count < 3:
-                time.sleep(self.delay)
-                self.pump_on(pin_number)
-                consecutive_water_count += 1
+            value = self.moisture_sensor.get_humidity()
+            if value < self.cfg.humidity_point:
+                while consecutive_water_count < 3:
+                    time.sleep(self.delay)
+                    self.pump_on(pin_number)
+                    consecutive_water_count += 1
 
+                response = 'Plant is no Longer dry... satisfied after {} times'.format(consecutive_water_count)
+            else:
+                response = 'Plant is wet enough... '
             GPIO.cleanup()
-            response = 'Plant is no Longer dry... satisfied after {} times'.format(consecutive_water_count)
 
             self.logger.info(response)
             self.mail.send_mail(response)
