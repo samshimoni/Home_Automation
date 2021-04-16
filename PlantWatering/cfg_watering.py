@@ -31,7 +31,7 @@ class Cfg:
         self.waterDelay = plant_params['delay']
         self.serial_port = plant_params['serial_port']
         self.baud_rate = plant_params['baud_rate']
-        self.humidity_point = plant_params['humidity_point']
+        self.threshold = plant_params['threshold']
 
         self.subject = mail_params['subject']
         self.frm = mail_params['from']

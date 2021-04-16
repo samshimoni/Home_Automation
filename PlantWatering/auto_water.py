@@ -19,27 +19,28 @@ class PlantWatering(device.Device, ABC):
         self.water_sensor_pin = self.cfg.waterSensorPin
         self.delay = self.cfg.waterDelay
         self.mail = mail_sender.MailSender()
-        self.moisture_sensor = capacitive_sensor.MoistureSensor()
 
     def init_output(self):
         for i in self.pinList:
             GPIO.setup(i, GPIO.OUT)
             GPIO.output(i, GPIO.HIGH)
 
-    def auto_water(self, pin_number):
+    def auto_water(self, pin_number, moisture_value):
+        sensor = capacitive_sensor.MoistureSensor()
         consecutive_water_count = 0
         self.init_output()
         try:
-            value = self.moisture_sensor.get_humidity()
-            if value < self.cfg.humidity_point:
+
+            if moisture_value < self.cfg.threshold:
                 while consecutive_water_count < 3:
                     time.sleep(self.delay)
                     self.pump_on(pin_number)
                     consecutive_water_count += 1
 
-                response = 'Plant is no Longer dry... satisfied after {} times'.format(consecutive_water_count)
+                response = 'Plant is no Longer dry... satisfied after {} times, humidity is {}'\
+                    .format(consecutive_water_count, sensor.read_humidity(pin_number))
             else:
-                response = 'Plant is wet enough... '
+                response = 'Plant is wet enough... Humidity is {} '.format(moisture_value)
             GPIO.cleanup()
 
             self.logger.info(response)
